@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="WeatherApp.Views.WeatherPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:Converters="clr-namespace:WeatherApp.Converters"
+    xmlns:behaviors="clr-namespace:WeatherApp.Behaviours"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="clr-namespace:WeatherApp.ViewModels"
+    BackgroundImageSource="{Binding SelectedDayWeather.Description, Converter={Converters:StringToBackgroundImageConverter}}"
+    mc:Ignorable="d">
+    <ContentPage.BindingContext>
+        <viewmodels:WeatherViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsBusy, Mode=OneWay}">
+            <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <StackLayout Padding="15" VerticalOptions="CenterAndExpand">
+                    <Label
+                        Margin="0,20,0,0"
+                        FontAttributes="Bold"
+                        FontSize="48"
+                        Text="{Binding City}"
+                        TextColor="White" />
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="36"
+                        Text="{Binding SelectedDayWeather.Day}"
+                        TextColor="LightGray" />
+                    <Grid Margin="0,20,0,0" HorizontalOptions="FillAndExpand">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Image
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            HeightRequest="160"
+                            HorizontalOptions="Center"
+                            Source="{Binding SelectedDayWeather.Description, Converter={Converters:StringToConditionImageConverter}}"
+                            VerticalOptions="End"
+                            WidthRequest="160" />
+
+                        <StackLayout
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Orientation="Vertical"
+                            VerticalOptions="Center">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="90"
+                                HorizontalOptions="End"
+                                IsVisible="{Binding IsToday}"
+                                Text="{Binding CurrenTemperature, Converter={Converters:DoubleToTemperatureStringConverter}}"
+                                TextColor="White" />
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="60"
+                                HorizontalOptions="End"
+                                IsVisible="{Binding IsToday, Converter={Converters:InverseBoolConverter}}"
+                                Text="{Binding SelectedDayWeather.Maxtemperature, Converter={Converters:DoubleToTemperatureStringConverter}}"
+                                TextColor="White" />
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="60"
+                                HorizontalOptions="End"
+                                IsVisible="{Binding IsToday, Converter={Converters:InverseBoolConverter}}"
+                                Text="{Binding SelectedDayWeather.Mintemperature, Converter={Converters:DoubleToTemperatureStringConverter}}"
+                                TextColor="LightGray" />
+                        </StackLayout>
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            FontAttributes="Bold"
+                            FontSize="24"
+                            HorizontalOptions="End"
+                            Text="{Binding SelectedDayWeather.Description}"
+                            TextColor="WhiteSmoke"
+                            VerticalOptions="Center" />
+
+                        <StackLayout
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Margin="0,0,0,5"
+                            Orientation="Horizontal"
+                            VerticalOptions="Center">
+                            <Image
+                                HeightRequest="50"
+                                Source="sunrise.png"
+                                VerticalOptions="Center"
+                                WidthRequest="50" />
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="Small"
+                                Text="{Binding SelectedDayWeather.Sunrise}"
+                                TextColor="White"
+                                VerticalOptions="Center" />
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="Small"
+                                Text="{Binding SelectedDayWeather.Sunset}"
+                                TextColor="LightGray"
+                                VerticalOptions="Center" />
+                        </StackLayout>
+                    </Grid>
+                </StackLayout>
+                <ScrollView Orientation="Horizontal">
+                    <FlexLayout
+                        x:Name="SevenDayFlexLayout"
+                        Margin="0,30,0,20"
+                        AlignContent="Start"
+                        BindableLayout.ItemsSource="{Binding SevenDayForecast}"
+                        Direction="Row"
+                        VerticalOptions="EndAndExpand">
+                        <FlexLayout.Behaviors>
+                            <behaviors:FlexLayoutItemTappedBehavior Command="{Binding ViewDayWeatherTapCommand}" />
+                        </FlexLayout.Behaviors>
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Grid
+                                    Padding="5"
+                                    VerticalOptions="End"
+                                    WidthRequest="105">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <BoxView
+                                        Grid.Row="0"
+                                        Grid.ColumnSpan="2"
+                                        BackgroundColor="GreenYellow"
+                                        HeightRequest="4"
+                                        IsVisible="{Binding IsSelected, Converter={Converters:InverseBoolConverter}}" />
+                                    <Label
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="2"
+                                        FontAttributes="Bold"
+                                        FontSize="Medium"
+                                        HorizontalOptions="Start"
+                                        Text="{Binding Day, Converter={Converters:DayOfWeekConverter}}"
+                                        TextColor="White"
+                                        VerticalOptions="Center" />
+                                    <Image
+                                        Grid.Row="2"
+                                        Grid.RowSpan="2"
+                                        Grid.Column="0"
+                                        HeightRequest="50"
+                                        Source="{Binding Description, Converter={Converters:StringToConditionImageConverter}}"
+                                        VerticalOptions="Center"
+                                        WidthRequest="50" />
+                                    <Label
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        FontAttributes="Bold"
+                                        FontSize="Medium"
+                                        HorizontalOptions="End"
+                                        Text="{Binding Maxtemperature, Converter={Converters:DoubleToTemperatureStringConverter}}"
+                                        TextColor="White"
+                                        VerticalOptions="Center" />
+                                    <Label
+                                        Grid.Row="3"
+                                        Grid.Column="1"
+                                        FontAttributes="Bold"
+                                        FontSize="Medium"
+                                        HorizontalOptions="End"
+                                        Text="{Binding Mintemperature, Converter={Converters:DoubleToTemperatureStringConverter}}"
+                                        TextColor="LightGray"
+                                        VerticalOptions="Center" />
+                                    <BoxView
+                                        Grid.Row="4"
+                                        Grid.ColumnSpan="2"
+                                        BackgroundColor="GreenYellow"
+                                        HeightRequest="4"
+                                        IsVisible="{Binding IsSelected}" />
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
+                </ScrollView>
+            </StackLayout>
+        </RefreshView>
+    </ContentPage.Content>
+</ContentPage>
