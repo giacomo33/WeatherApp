@@ -1,5 +1,5 @@
 # WeatherApp
-Sample weather app built using Xamain Forms with support for:
+Sample weather app built using Xamarin Forms with support for:
 
 - iOS
 - Android
@@ -14,7 +14,7 @@ App queries OpenWeatherMap.org to get weather forecast for the device's location
 - Xamanimation
 
 #### Tests
-Using xUnit to mock out the service and test the indicidual components.
+Using xUnit to mock out the service and test the individual components.
 
 #### Prerequisites
 On both Android and IOS Simulators setup a Location for the app to automatically read Geo Coordinates.
