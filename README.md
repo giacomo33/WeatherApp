@@ -12,6 +12,8 @@ App queries OpenWeatherMap.org to get weather forecast for the device's location
 - TimeZoneConverter
 - Xamarin Essentials
 - Xamanimation
+- FluentAssertions
+- AutoFixture
 
 #### Tests
 Using xUnit to mock out the service and test the individual components.
